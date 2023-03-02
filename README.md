@@ -1,8 +1,11 @@
 Fetch Rewards Data Engineering take home assessment.
 
 Goal is to read from AWS SQS, mask pii and load data into Postgres DB.
+
 Fields to be masked are the device_id and the ip address,
+
 and duplicate values must be able to be easily identifiable while still being masked.
+
 
 Target table's DDL is:
     user_id             varchar(128),
@@ -13,10 +16,13 @@ Target table's DDL is:
     app_version         integer (read from SQS as a version i.e. 2.3.0, 0.2.6 or 0.96 so just take first num),
     create_date         date
 
-Requires docker container localstack running local instances of PostgreSQL and AWS SQS.
+Requires docker container localstack running local instances of PostgreSQL and AWS SQS, so run "docker-compose up" in the terminal.
 Requires python (my version is 3.10), AWS SDK for python boto3 (pip install boto3), and postgres db adapter psycopg2 (pip install psycopg2).
-In order to run program, run 'docker-compose up' to start containers, then run recievemessage.py
+In order to run program, run 'docker-compose up' on command line to start containers and wait a little bit to allow them to spin up. Then run "python3 maskPII.py" in the terminal.
+The program may take a little bit of time as it must wait 20 seconds to ensure no other AWS SQS messages are left.
 After python program is run, postgres DB should have 'device_id' and 'ip' as masked values with other values the same as from AWS SQS.
+Output of program to terminal is a query of the postgreSQL database, with the schema of the database at the top and each row delimited by parentheses.
+Additionally, a "securedatabase.json" of the true ip to masked ip and true device id to masked device id is generated, with an expectation that if this were a real application, the "securedatabase.json" could be created to map the pii.
 
 Questions to be answered:
     **Note:* Since AWS SQS was utilized for reading data, most questions below will be answered with AWS products/services in mind
