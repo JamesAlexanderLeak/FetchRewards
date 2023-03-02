@@ -10,7 +10,7 @@ Target table's DDL is:
     masked_ip           varchar(256),
     maked_device_id     varchar(256),
     locale              varchar(32),
-    app_version         integer,
+    app_version         integer (read from SQS as a version i.e. 2.3.0, 0.2.6 or 0.96 so just take first num),
     create_date         date
 
 Requires docker container localstack running local instances of PostgreSQL and AWS SQS.
