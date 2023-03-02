@@ -1,6 +1,5 @@
 Fetch Rewards Data Engineering take home assessment.
 
-Requires docker container localstack running local instances of PostgreSQL and AWS SQS.
 Goal is to read from AWS SQS, mask pii and load data into Postgres DB.
 Fields to be masked are the device_id and the ip address,
 and duplicate values must be able to be easily identifiable while still being masked.
@@ -13,6 +12,11 @@ Target table's DDL is:
     locale              varchar(32),
     app_version         integer,
     create_date         date
+
+Requires docker container localstack running local instances of PostgreSQL and AWS SQS.
+Requires python (my version is 3.10), AWS SDK for python boto3 (pip install boto3), and postgres db adapter psycopg2 (pip install psycopg2).
+In order to run program, run 'docker-compose up' to start containers, then run recievemessage.py
+After python program is run, postgres DB should have 'device_id' and 'ip' as masked values with other values the same as from AWS SQS.
 
 Questions to be answered:
     **Note:* Since AWS SQS was utilized for reading data, most questions below will be answered with AWS products/services in mind
@@ -28,6 +32,7 @@ Questions to be answered:
     *Version database schema and migrations
     *Ensure data encryption for protection of sensitive data
     *Continuous Integration/Continuous Deployment pipeline for deployment
+    *If I had more time, I would also refactor code and make it cleaner
 
     How can this application scale with a growing dataset?
     *Utilize horizontal autoscaling in AWS Aurora or AWS RDS to host the postgres database
@@ -43,7 +48,7 @@ Questions to be answered:
     which could be recovered later on.
     *PII could also just not be stored in a database, instead could be encrypted with RSA with only certain restricted
         individuals having private keys.
-    *Chose to go with hashed keys since it was easier and faster
+    *Chose to go with python hash function since it was easier. In real scenario, would encrypt data.
 
     What are the assumptions you made?
     *Assumed data quality from SQS
